@@ -7,9 +7,11 @@ export default ({ width, height, tilesize }) => {
   let inputManager = new InputManager()
   const handleInput = (action, data) => {
     console.log(`handle input: ${action}:${JSON.stringify(data)}`)
+    console.log(player)
     let newPlayer = { ...player }
     newPlayer.x += data.x * tilesize
     newPlayer.y += data.y * tilesize
+    console.log(newPlayer)
     setPlayer(newPlayer)
   }
 
