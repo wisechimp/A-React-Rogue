@@ -1,16 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react'
 import InputManager from '../input-manager'
+import Player from '../player'
+import World from '../world'
 
 export default ({ width, height, tilesize }) => {
   const canvasRef = useRef()
-  const [player, setPlayer] = useState({ x: 64, y: 128 })
+  const [player, setPlayer] = useState(new Player(1, 2, tilesize))
   let inputManager = new InputManager()
   const handleInput = (action, data) => {
     console.log(`handle input: ${action}:${JSON.stringify(data)}`)
     console.log(player)
-    let newPlayer = { ...player }
-    newPlayer.x += data.x * tilesize
-    newPlayer.y += data.y * tilesize
+    let newPlayer = new Player()
+    Object.assign(newPlayer, player)
+    newPlayer.move(data.x, data.y)
     console.log(newPlayer)
     setPlayer(newPlayer)
   }
@@ -29,8 +31,7 @@ export default ({ width, height, tilesize }) => {
     console.log("Draw to canvas")
     const canvasContext = canvasRef.current.getContext('2d')
     canvasContext.clearRect(0, 0, width * tilesize, height * tilesize)
-    canvasContext.fillStyle='#000'
-    canvasContext.fillRect(player.x, player.y, 16, 16)
+    player.draw(canvasContext)
   })
 
   return (
