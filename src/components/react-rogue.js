@@ -1,22 +1,27 @@
 import React, { useRef, useEffect, useState } from 'react'
 import InputManager from '../gameclasses/input-manager'
-import Player from '../gameclasses/player'
 import World from '../gameclasses/world'
 
 export default ({ width, height, tilesize }) => {
   const canvasRef = useRef()
-  const [player, setPlayer] = useState(new Player(1, 2, tilesize))
   const [world, setWorld] = useState(new World(width, height, tilesize))
   let inputManager = new InputManager()
   const handleInput = (action, data) => {
     console.log(`handle input: ${action}:${JSON.stringify(data)}`)
-    console.log(player)
-    let newPlayer = new Player()
-    Object.assign(newPlayer, player)
-    newPlayer.move(data.x, data.y)
-    console.log(newPlayer)
-    setPlayer(newPlayer)
+    let newWorld = new World()
+    Object.assign(newWorld, world)
+    newWorld.movePlayer(data.x, data.y)
+    setWorld(newWorld)
   }
+
+  useEffect(() => {
+    let newWorld = new World();
+    Object.assign(newWorld, world);
+    newWorld.createCellularMap();
+    newWorld.createEntityInSpace(world.player)
+    setWorld(newWorld);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Binding the inputs so the key entry can be recognised
   useEffect(() => {
@@ -35,7 +40,6 @@ export default ({ width, height, tilesize }) => {
     const canvasContext = canvasRef.current.getContext('2d')
     canvasContext.clearRect(0, 0, width * tilesize, height * tilesize)
     world.draw(canvasContext)
-    player.draw(canvasContext)
   })
 
   return (
