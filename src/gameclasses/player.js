@@ -1,27 +1,27 @@
-class Player {
-    constructor(x, y, size) {
-        this.x = x
-        this.y = y
-        this.size = size
-    }
+import Entity from './entity'
 
-    move(dx, dy) {
-        this.x += dx
-        this.y += dy
+class Player extends Entity {
+  attributes = {
+    name: "Player",
+    ascii: "@",
+    health: 10,
+    color: "#ff0000",
+    offset: {
+      x: 0,
+      y: 12
     }
+  };
 
-    draw(context) {
-        context.fillStyle = '#ff0000'
-        context.textBaseline = 'hanging'
-        context.font = '16px Helvetica'
-        context.fillText('@', this.x * this.size, this.y * this.size)
-    }
+  move(dx, dy) {
+    this.x += dx;
+    this.y += dy;
+  }
 
-    copyPlayer() {
-        let newPlayer = new Player()
-        Object.assign(newPlayer, this)
-        return newPlayer
-    }
+  copyPlayer() {
+    let newPlayer = new Player();
+    Object.assign(newPlayer, this);
+    return newPlayer;
+  }
 }
 
 export default Player

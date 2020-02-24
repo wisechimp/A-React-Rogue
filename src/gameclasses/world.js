@@ -27,6 +27,10 @@ class World {
     return this.entities[0]
   }
 
+  add(entity) {
+    this.entities.push(entity)
+  }
+
   createEntityInSpace(entity) {
     for (let x = entity.x; x < this.width; x++) {
       for (let y = entity.y; y < this.height; y++) {
@@ -39,9 +43,20 @@ class World {
     }
   }
 
+  getEntityAtLocation(x, y) {
+    return this.entities.find(entity => entity.x === x && entity.y === y)
+  }
+
   movePlayer(dx, dy) {
     let tempPlayer = this.player.copyPlayer()
     tempPlayer.move(dx, dy)
+    let entity = this.getEntityAtLocation(tempPlayer.x, tempPlayer.y)
+    if (entity) {
+      console.log(entity)
+      entity.action('bump', this)
+      return
+    }
+
     if (this.isWall(tempPlayer.x, tempPlayer.y)) {
       return console.log(`Way blocked at ${tempPlayer.x}:${tempPlayer.y}!`)
     }
